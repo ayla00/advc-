@@ -56,23 +56,25 @@ bool HashTable::add(int hnum, std::string hstring)
 bool HashTable::remove(int hnum)
 {
 	hashIndex = moduloHash(hnum);
+	searchptr[hashIndex] = startptr[hashIndex];
+
 	if (hashCount[hashIndex] > 0)
 	{
 		searchptr[hashIndex] = startptr[hashIndex];
 		//this function changes the value of the startptr[hashIndex]
-		hashSearch(startptr[hashIndex], endptr[hashIndex], hnum); //replacing this function with searchptr[hashIndex]
+		hashSearch(startptr[hashIndex], hnum); //replacing this function with searchptr[hashIndex]
 
 		if ((searchptr[hashIndex]->id == hnum) && (searchptr[hashIndex] == startptr[hashIndex]))
 		{
 			removeHead(hnum);
 			return true;
 		}
-		else if ((searchptr[hashIndex]->id == hnum) && (searchptr[hashIndex] == endptr[hashIndex]))
+		else if ((searchptr[hashIndex]->id == hnum) && (searchptr[hashIndex]->forward == nullptr))
 		{
 			removeTail(hnum);
 			return true;
 		}
-		else if (searchptr[hashIndex]->id == hnum)
+		else if (searchptr[hashIndex]->id == hnum) 
 		{
 			removeMiddle(hnum);
 			return true;
@@ -82,7 +84,7 @@ bool HashTable::remove(int hnum)
 	}
 	else
 	{
-		std::cout << "the hash table is empty.\n";
+		//hash table is empty, do not return message to user, just return false
 		return false;
 	}
 
