@@ -47,8 +47,6 @@ private:
 	HashStruct * hashArray[19]; //array of pointer to structs = hash table
 	HashStruct * hashSearch(HashStruct *low, HashStruct * high, int hnum);
 	HashStruct * startptr[19];
-	HashStruct * endptr[19];
-	HashStruct * newhashptr[19];
 	HashStruct * searchptr[19];
 	HashStruct * addHead(int hnum, std::string hstring);
 	void removeHead(int hnum);
