@@ -194,52 +194,50 @@ HashStruct * HashTable::addHead(int hnum, std::string hstring)
 
 	if (hashCount[hashIndex] == 0)
 	{
-		newhashptr[hashIndex] = new HashStruct;
+		startptr[hashIndex] = new HashStruct;
 		hashCount[hashIndex]++;
 
-		startptr[hashIndex] = newhashptr[hashIndex];
 		searchptr[hashIndex] = startptr[hashIndex];
-		endptr[hashIndex] = newhashptr[hashIndex];
 
-		newhashptr[hashIndex]->id = hnum;
-		newhashptr[hashIndex]->data = hstring;
-		newhashptr[hashIndex]->forward = nullptr;
-		newhashptr[hashIndex]->backward = nullptr;
+		startptr[hashIndex]->id = hnum;
+		startptr[hashIndex]->data = hstring;
+		startptr[hashIndex]->forward = nullptr;
+		startptr[hashIndex]->backward = nullptr;
 	}
 	else if ((hashCount[hashIndex] == 1) && (searchptr[hashIndex]->id > hnum)) //new HashStruct is the starting point
 	{
-		newhashptr[hashIndex] = new HashStruct;
+		searchptr[hashIndex] = startptr[hashIndex];
+
+		startptr[hashIndex] = new HashStruct;
 		hashCount[hashIndex]++;
 
-		newhashptr[hashIndex]->id = hnum;
-		newhashptr[hashIndex]->data = hstring;
-		newhashptr[hashIndex]->forward = startptr[hashIndex];
-		newhashptr[hashIndex]->backward = nullptr;
+		startptr[hashIndex]->id = hnum;
+		startptr[hashIndex]->data = hstring;
+		startptr[hashIndex]->forward = searchptr[hashIndex];
+		startptr[hashIndex]->backward = nullptr;
 
-		startptr[hashIndex]->forward = nullptr;
-		startptr[hashIndex]->backward = newhashptr[hashIndex];
+		searchptr[hashIndex]->forward = nullptr;
+		searchptr[hashIndex]->backward = startptr[hashIndex];
 
-		startptr[hashIndex] = newhashptr[hashIndex];
 	}
 	else if ((hashCount[hashIndex] > 1) && (hnum < startptr[hashIndex]->id)) //new HashStruct is the start
 	{
-		newhashptr[hashIndex] = new HashStruct;
+		searchptr[hashIndex] = startptr[hashIndex];
+		startptr[hashIndex] = new HashStruct;
 		hashCount[hashIndex]++;
 
 		//new HashStruct
-		newhashptr[hashIndex]->id = hnum;
-		newhashptr[hashIndex]->data = hstring;
-		newhashptr[hashIndex]->forward = startptr[hashIndex];
-		newhashptr[hashIndex]->backward = nullptr;
+		startptr[hashIndex]->id = hnum;
+		startptr[hashIndex]->data = hstring;
+		startptr[hashIndex]->forward = searchptr[hashIndex];
+		startptr[hashIndex]->backward = nullptr;
 
 		//old HashStruct
-		startptr[hashIndex]->forward = startptr[hashIndex]->forward;
-		startptr[hashIndex]->backward = newhashptr[hashIndex];
-
-		startptr[hashIndex] = newhashptr[hashIndex];
+		searchptr[hashIndex]->forward = searchptr[hashIndex]->forward;
+		searchptr[hashIndex]->backward = startptr[hashIndex];
 	}
 
-	return newhashptr[hashIndex];
+	return startptr[hashIndex];
 }
 
 void HashTable::removeHead(int hnum)
@@ -248,19 +246,21 @@ void HashTable::removeHead(int hnum)
 
 	if (hashCount[hashIndex] == 1)
 	{
-		searchptr[hashIndex]->id = 0;
-		searchptr[hashIndex]->data = "";
+		startptr[hashIndex]->id = 0;
+		startptr[hashIndex]->data = "";
 
 		startptr[hashIndex]->forward = nullptr;
 		startptr[hashIndex]->backward = nullptr;
+		
+		delete startptr[hashIndex];//this is dif for github version
 		startptr[hashIndex] = nullptr;
 
 		hashCount[hashIndex]--;
 	}
 	else
 	{
-		searchptr[hashIndex]->id = 0;
-		searchptr[hashIndex]->data = "";
+		startptr[hashIndex]->id = 0;
+		startptr[hashIndex]->data = "";
 
 		startptr[hashIndex] = startptr[hashIndex]->forward;
 		startptr[hashIndex]->forward = startptr[hashIndex]->forward;
