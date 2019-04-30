@@ -278,18 +278,15 @@ HashStruct * HashTable::addTail(int hnum, std::string hstring)
 {
 	hashIndex = moduloHash(hnum);
 
-	newhashptr[hashIndex] = new HashStruct;
+	searchptr[hashIndex]->forward = new HashStruct;
 	hashCount[hashIndex]++;
 
-	newhashptr[hashIndex]->id = hnum;
-	newhashptr[hashIndex]->data = hstring;
-	newhashptr[hashIndex]->forward = nullptr;
-	newhashptr[hashIndex]->backward = endptr[hashIndex];
+	(searchptr[hashIndex]->forward)->id = hnum;
+	(searchptr[hashIndex]->forward)->data = hstring;
+	(searchptr[hashIndex]->forward)->forward = nullptr;
+	(searchptr[hashIndex]->forward)->backward = searchptr[hashIndex];
 
-	endptr[hashIndex]->forward = newhashptr[hashIndex];
-	endptr[hashIndex] = newhashptr[hashIndex];
-
-	return newhashptr[hashIndex];
+	return searchptr[hashIndex]->forward;
 }
 
 
@@ -299,34 +296,36 @@ void HashTable::removeTail(int hnum)
 
 	if (hashCount[hashIndex] > 2)
 	{
-		endptr[hashIndex]->id = 0;
-		endptr[hashIndex]->data = "";
+		searchptr[hashIndex]->id = 0;
+		searchptr[hashIndex]->data = "";
 
-		endptr[hashIndex] = endptr[hashIndex]->backward;
-		endptr[hashIndex]->forward = nullptr;
-		endptr[hashIndex]->backward = (endptr[hashIndex]->backward);
+		searchptr[hashIndex] = searchptr[hashIndex]->backward;
+		(searchptr[hashIndex]->forward)->backward = nullptr;
+		//searchptr[hashIndex]->backward = (searchptr[hashIndex]->backward); , check this line if problems
+		searchptr[hashIndex]->forward = nullptr;
 	}
 	else if (hashCount[hashIndex] == 2)
 	{
 		searchptr[hashIndex]->id = 0;
 		searchptr[hashIndex]->data = "";
 
-		(endptr[hashIndex]->backward)->forward = nullptr;
-		endptr[hashIndex] = endptr[hashIndex]->backward;
-		endptr[hashIndex]->backward = nullptr;
+		searchptr[hashIndex] = searchptr[hashIndex]->backward;
+
+		(searchptr[hashIndex]->forward)->backward = nullptr;
+		searchptr[hashIndex]->backward = nullptr; //check this if problems
 	}
 	else
 	{
 		searchptr[hashIndex]->id = 0;
 		searchptr[hashIndex]->data = "";
 
-		endptr[hashIndex] = endptr[hashIndex]->backward;
-		endptr[hashIndex]->forward = nullptr;
-		endptr[hashIndex]->backward = nullptr;
+		searchptr[hashIndex] = searchptr[hashIndex]->backward;
+		searchptr[hashIndex]->forward = nullptr;
+		searchptr[hashIndex]->backward = nullptr;
 
 	}
-	delete searchptr[hashIndex];
-	searchptr[hashIndex] = nullptr;
+	delete searchptr[hashIndex]->forward;  
+	searchptr[hashIndex]->forward= nullptr;
 	hashCount[hashIndex]--;
 }
 
