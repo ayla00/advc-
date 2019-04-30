@@ -93,7 +93,7 @@ bool HashTable::remove(int hnum)
 bool HashTable::contains(int hnum)
 {
 	hashIndex = moduloHash(hnum);
-	searchptr[hashIndex] = hashSearch(startptr[hashIndex], endptr[hashIndex], hnum);
+	searchptr[hashIndex] = hashSearch(startptr[hashIndex], hnum);
 
 	if (searchptr[hashIndex] == nullptr)
 		return false;
@@ -108,7 +108,7 @@ std::string HashTable::getData(int hnum)
 	//function will give appropriate value for index
 	hashIndex = moduloHash(hnum);
 	searchptr[hashIndex] = startptr[hashIndex];
-	hashSearch(startptr[hashIndex], endptr[hashIndex], hnum);
+	hashSearch(startptr[hashIndex], hnum);
 
 	if ((startptr[hashIndex] == nullptr) || (searchptr[hashIndex] == nullptr))
 	{
