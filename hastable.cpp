@@ -17,7 +17,6 @@ HashTable::HashTable()
 	for (int index = 0; index < SIZE; index++)
 	{
 		startptr[index] = nullptr;
-		endptr[index] = nullptr;
 		searchptr[index] = nullptr;
 		hashCount[index] = 0;
 	}
