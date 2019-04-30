@@ -335,19 +335,19 @@ HashStruct * HashTable::addMiddle(int hnum, std::string hstring)
 
 	if (searchptr[hashIndex]->id > hnum)
 	{
-		newhashptr[hashIndex] = new HashStruct;
+		(searchptr[hashIndex]->backward)->forward = new HashStruct;
 		(hashCount[hashIndex])++;
 
-		newhashptr[hashIndex]->id = hnum;
-		newhashptr[hashIndex]->data = hstring;
-		newhashptr[hashIndex]->forward = searchptr[hashIndex]; //index
-		newhashptr[hashIndex]->backward = searchptr[hashIndex]->backward; //index
+		((searchptr[hashIndex]->backward)->forward)->id = hnum;
+		((searchptr[hashIndex]->backward)->forward)->data = hstring;
+		((searchptr[hashIndex]->backward)->forward)->forward = searchptr[hashIndex]; //index
+		((searchptr[hashIndex]->backward)->forward)->backward = searchptr[hashIndex]->backward; //index
 
-		(searchptr[hashIndex]->backward)->forward = newhashptr[hashIndex];
-		searchptr[hashIndex]->backward = newhashptr[hashIndex];
+		searchptr[hashIndex]->backward = (searchptr[hashIndex]->backward)->forward;
+		searchptr[hashIndex] = searchptr[hashIndex]->backward;
 	}
 
-	return newhashptr[hashIndex];
+	return searchptr[hashIndex]; //definetely check this if issues
 }
 
 
