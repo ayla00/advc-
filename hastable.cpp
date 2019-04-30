@@ -38,7 +38,7 @@ bool HashTable::add(int hnum, std::string hstring)
 	hashIndex = moduloHash(hnum);
 	searchptr[hashIndex] = startptr[hashIndex];
 
-	hashSearch(startptr[hashIndex], endptr[hashIndex], hnum);
+	hashSearch(startptr[hashIndex], hnum);
 
 	if ((hashCount[hashIndex] < 1) || (hnum < startptr[hashIndex]->id))
 		hashArray[hashIndex] = addHead(hnum, hstring);
@@ -154,7 +154,7 @@ void HashTable::printList()
 	}
 }
 
-HashStruct *HashTable::hashSearch(HashStruct *low, HashStruct *high, int hnum)
+HashStruct *HashTable::hashSearch(HashStruct *search, int hnum)
 {
 	hashIndex = moduloHash(hnum);
 
@@ -165,20 +165,16 @@ HashStruct *HashTable::hashSearch(HashStruct *low, HashStruct *high, int hnum)
 		searchptr[hashIndex] == searchptr[hashIndex];
 	else if (hnum < (startptr[hashIndex]->id))
 		searchptr[hashIndex] = startptr[hashIndex];
-	else if (hnum > (high->id))
-		searchptr[hashIndex] = endptr[hashIndex];
-	else if ((hnum == low->id) || (hnum == searchptr[hashIndex]->id))
+	else if ((hnum == search->id) || (hnum == searchptr[hashIndex]->id))
 		searchptr[hashIndex] = searchptr[hashIndex];
-	else if (hnum == high->id)
-		searchptr[hashIndex] = high;
-	else if (searchptr[hashIndex]->id <= hnum)//(high->id >= low->id) //(searchptr[hashIndex]->id <= hnum) //old version (high->id >= low->id)
+	else if (searchptr[hashIndex]->id < hnum)//(high->id >= low->id) //(searchptr[hashIndex]->id <= hnum) //old version (high->id >= low->id)
 	{
-		if ((hnum > low->id) && (hashCount[hashIndex] >= 2))
+		if ((hnum > search->id) && (hashCount[hashIndex] >= 2) && (search->forward != nullptr))
 		{
 			searchptr[hashIndex] = searchptr[hashIndex]->forward;
-			hashSearch(searchptr[hashIndex], endptr[hashIndex], hnum);
+			hashSearch(searchptr[hashIndex], hnum);
 		}
-		else if (hnum < low->id)
+		else if (hnum < search->id)
 			searchptr[hashIndex] = searchptr[hashIndex];
 	}
 	else
