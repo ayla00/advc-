@@ -400,13 +400,13 @@ void HashTable::clear()
 	{
 		searchptr[h] = startptr[h];
 
-		for (int d = 1; d < hashCount[h]; d++)
-		{
-			searchptr[d] = searchptr[d]->forward;
-		}
-
 		if (hashCount[h] > 1)
 		{
+			while (searchptr[h]->forward != nullptr)
+			{
+				searchptr[h] = searchptr[h]->forward;
+			}
+
 			while (searchptr[h] != startptr[h])
 			{
 				searchptr[h]->id = 0;
