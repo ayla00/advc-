@@ -398,7 +398,7 @@ void HashTable::clear()
 {
 	for (int h = 0; h < SIZE; h++)
 	{
-		searchptr[h] = starptr[h];
+		searchptr[h] = startptr[h];
 
 		for (int d = 1; d < hashCount[h]; d++)
 		{
