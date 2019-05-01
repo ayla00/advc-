@@ -399,6 +399,12 @@ void HashTable::clear()
 	for (int h = 0; h < SIZE; h++)
 	{
 		searchptr[h] = endptr[h];
+
+		for (int d = 1; d < nodeCount; d++)
+		{
+			searchptr[d] = searchptr[d]->forward;
+		}
+
 		if (hashCount[h] > 1)
 		{
 			while (searchptr[h] != startptr[h])
